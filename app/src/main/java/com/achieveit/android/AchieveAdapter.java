@@ -43,8 +43,8 @@ public class AchieveAdapter extends RecyclerView.Adapter<AchieveAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.achieve_list_item, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
+
     }
 
     @Override
@@ -60,7 +60,7 @@ public class AchieveAdapter extends RecyclerView.Adapter<AchieveAdapter.ViewHold
         String percentStr = String.valueOf(result) + "%";
         holder.progress.setText(percentStr);
         holder.progressBar.setProgress((int) result);
-
+        //test commit
     }
 
     @Override
