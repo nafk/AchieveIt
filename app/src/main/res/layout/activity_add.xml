@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/achieve_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="achieve name" />
+
+    <EditText
+        android:id="@+id/workload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="workload" />
+
+    <EditText
+        android:id="@+id/start_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="start time" />
+    <!--<EditText
+        android:id="@+id/end_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="" />-->
+    <Button
+        android:id="@+id/save_achieve"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="save" />
+
+
+</LinearLayout>
