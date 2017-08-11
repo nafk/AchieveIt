@@ -1,16 +1,23 @@
 package com.achieveit.android;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<Achieve> achieveList = new ArrayList<>();
+    private static List<Achieve> achieveList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,23 +29,37 @@ public class MainActivity extends AppCompatActivity {
         AchieveAdapter adapter = new AchieveAdapter(achieveList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        Button addAchieve = (Button) findViewById(R.id.add_achieve);
+        addAchieve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddActivity.actionStart(MainActivity.this);
+            }
+        });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initData();
+        Log.d("mainactivity","onrestart~~~~~~~~~");
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.achieve_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        AchieveAdapter adapter = new AchieveAdapter(achieveList);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
     }
 
     private void initData() {
-        Achieve achieve1 = new Achieve();
-        achieve1.setName("first goal");
-        achieve1.setDone(20);
-        achieve1.setTotal(580);
-        achieve1.setStartDate("2017-08-10");
 
-        Achieve achieve2 = new Achieve();
-        achieve2.setName("second goal");
-        achieve2.setDone(350);
-        achieve2.setTotal(1580);
-        achieve2.setStartDate("2017-08-11");
+        List<Achieve> resultList = DataSupport.findAll(Achieve.class);
+        Log.d("mainactivity","initdata:"+resultList.size());
+        achieveList = resultList;
+    }
 
-        achieveList.add(achieve1);
-        achieveList.add(achieve2);
-        //
+    public static void actionStart(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
     }
 }

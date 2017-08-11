@@ -6,7 +6,7 @@ import org.litepal.crud.DataSupport;
  * Created by YT on 17/8/10/010.
  */
 
-public class Achieve extends DataSupport{
+public class Achieve extends DataSupport {
 
     private String name;
     private int done;
