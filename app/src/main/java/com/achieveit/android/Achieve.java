@@ -2,16 +2,28 @@ package com.achieveit.android;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * Created by YT on 17/8/10/010.
  */
 
-public class Achieve extends DataSupport {
+public class Achieve extends DataSupport implements Serializable {
 
+    private Integer id;
     private String name;
-    private int done;
-    private int total;
+    private Integer done;
+    private Integer total;
     private String startDate;
+    private String remark;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -21,19 +33,19 @@ public class Achieve extends DataSupport {
         this.name = name;
     }
 
-    public int getDone() {
+    public Integer getDone() {
         return done;
     }
 
-    public void setDone(int done) {
+    public void setDone(Integer done) {
         this.done = done;
     }
 
-    public int getTotal() {
+    public Integer getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(Integer total) {
         this.total = total;
     }
 
@@ -43,5 +55,13 @@ public class Achieve extends DataSupport {
 
     public void setStartDate(String startDate) {
         this.startDate = startDate;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

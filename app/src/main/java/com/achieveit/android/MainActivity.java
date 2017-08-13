@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         addAchieve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddActivity.actionStart(MainActivity.this);
+                AddActivity.actionStart(MainActivity.this, null);
             }
         });
     }
@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         initData();
-        Log.d("mainactivity","onrestart~~~~~~~~~");
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.achieve_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         AchieveAdapter adapter = new AchieveAdapter(achieveList);
@@ -54,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     private void initData() {
 
         List<Achieve> resultList = DataSupport.findAll(Achieve.class);
-        Log.d("mainactivity","initdata:"+resultList.size());
         achieveList = resultList;
     }
 

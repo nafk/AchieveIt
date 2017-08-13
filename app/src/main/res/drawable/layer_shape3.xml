@@ -6,7 +6,7 @@
         <shape>
             <corners android:radius="2dp" />
             <size android:height="10dp" />
-            <solid android:color="#9E9E9E" />
+            <solid android:color="#E0E0E0" />
         </shape>
     </item>
     <item
@@ -16,7 +16,7 @@
             <shape>
                 <corners android:radius="2dp" />
                 <size android:height="10dp" />
-                <solid android:color="#E91E63" />
+                <solid android:color="#EC407A" />
             </shape>
         </scale>
     </item>
@@ -27,7 +27,7 @@
             <shape>
                 <corners android:radius="2dp" />
                 <size android:height="10dp" />
-                <solid android:color="#E91E63" />
+                <solid android:color="#EC407A" />
             </shape>
         </scale>
     </item>
