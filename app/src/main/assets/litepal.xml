@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <litepal>
     <dbname value="achieveit"></dbname>
-    <version value="2"></version>
+    <version value="1"></version>
     <list>
-        <mapping class="com.achieveit.android.Achieve">
+        <mapping class="com.achieveit.android.Goal">
 
         </mapping>
 

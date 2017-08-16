@@ -5,13 +5,13 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/add_achieve"
+        android:id="@+id/add_goal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="new achieve" />
+        android:text="new goal" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/achieve_list"
+        android:id="@+id/goal_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

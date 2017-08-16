@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by YT on 17/8/10/010.
  */
 
-public class Achieve extends DataSupport implements Serializable {
+public class Goal extends DataSupport implements Serializable {
 
     private Integer id;
     private String name;

@@ -15,24 +15,24 @@ import java.util.List;
  * Created by YT on 17/8/10/010.
  */
 
-public class AchieveAdapter extends RecyclerView.Adapter<AchieveAdapter.ViewHolder> {
+public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
-    private List<Achieve> mAchieveList;
+    private List<Goal> mGoalList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView achieveName;
+        TextView goalName;
         TextView done;
         TextView total;
         TextView startDate;
         TextView progress;
         ProgressBar progressBar;
 
-        View achieveView;
+        View goalView;
 
         public ViewHolder(View view) {
             super(view);
-            achieveView = view;
-            achieveName = (TextView) view.findViewById(R.id.achieve_name);
+            goalView = view;
+            goalName = (TextView) view.findViewById(R.id.goal_name);
             done = (TextView) view.findViewById(R.id.done);
             total = (TextView) view.findViewById(R.id.total);
             startDate = (TextView) view.findViewById(R.id.start_date);
@@ -41,21 +41,21 @@ public class AchieveAdapter extends RecyclerView.Adapter<AchieveAdapter.ViewHold
         }
     }
 
-    public AchieveAdapter(List<Achieve> achieveList) {
-        mAchieveList = achieveList;
+    public GoalAdapter(List<Goal> goalList) {
+        mGoalList = goalList;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.achieve_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.goal_list_item, parent, false);
         final ViewHolder holder = new ViewHolder(view);
 
-        holder.achieveView.setOnClickListener(new View.OnClickListener() {
+        holder.goalView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                Achieve achieve = mAchieveList.get(position);
-                AddActivity.actionStart(v.getContext(), achieve);
+                Goal goal = mGoalList.get(position);
+                AddActivity.actionStart(v.getContext(), goal);
 
             }
         });
@@ -67,13 +67,13 @@ public class AchieveAdapter extends RecyclerView.Adapter<AchieveAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Achieve achieve = mAchieveList.get(position);
-        holder.achieveName.setText(achieve.getName());
-        holder.done.setText(String.valueOf(achieve.getDone()));
-        holder.total.setText(String.valueOf(achieve.getTotal()));
-        holder.startDate.setText(achieve.getStartDate());
+        Goal goal = mGoalList.get(position);
+        holder.goalName.setText(goal.getName());
+        holder.done.setText(String.valueOf(goal.getDone()));
+        holder.total.setText(String.valueOf(goal.getTotal()));
+        holder.startDate.setText(goal.getStartDate());
 
-        float result = (float) achieve.getDone() / (float) achieve.getTotal() * 100f;
+        float result = (float) goal.getDone() / (float) goal.getTotal() * 100f;
 
         BigDecimal bd = new BigDecimal(result);
         bd = bd.setScale(1, RoundingMode.HALF_UP);
@@ -84,7 +84,7 @@ public class AchieveAdapter extends RecyclerView.Adapter<AchieveAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return mAchieveList.size();
+        return mGoalList.size();
     }
 
 }

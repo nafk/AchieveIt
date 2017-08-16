@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,21 +16,21 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static List<Achieve> achieveList = new ArrayList<>();
+    private static List<Goal> goalList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initData();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.achieve_list);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goal_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        AchieveAdapter adapter = new AchieveAdapter(achieveList);
+        GoalAdapter adapter = new GoalAdapter(goalList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        Button addAchieve = (Button) findViewById(R.id.add_achieve);
-        addAchieve.setOnClickListener(new View.OnClickListener() {
+        Button addGoal = (Button) findViewById(R.id.add_goal);
+        addGoal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddActivity.actionStart(MainActivity.this, null);
@@ -43,17 +42,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         initData();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.achieve_list);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goal_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        AchieveAdapter adapter = new AchieveAdapter(achieveList);
+        GoalAdapter adapter = new GoalAdapter(goalList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }
 
     private void initData() {
 
-        List<Achieve> resultList = DataSupport.findAll(Achieve.class);
-        achieveList = resultList;
+        List<Goal> resultList = DataSupport.findAll(Goal.class);
+        goalList = resultList;
     }
 
     public static void actionStart(Context context) {
