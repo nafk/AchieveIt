@@ -50,9 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
-
-        List<Goal> resultList = DataSupport.findAll(Goal.class);
-        goalList = resultList;
+        goalList = DataSupport.findAll(Goal.class);
     }
 
     public static void actionStart(Context context) {

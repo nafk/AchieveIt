@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -14,7 +13,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="成就名称：" />
+            android:text="@string/goal_name" />
 
         <EditText
             android:id="@+id/goal_name"
@@ -30,7 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="总任务量：" />
+            android:text="@string/total" />
 
         <EditText
             android:id="@+id/total"
@@ -42,16 +41,18 @@
 
 
         <Button
+            android:id="@+id/total_minus"
             style="@style/Widget.AppCompat.Button.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-" />
+            android:text="@string/minus" />
 
         <Button
+            android:id="@+id/total_plus"
             style="@style/Widget.AppCompat.Button.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+" />
+            android:text="@string/plus" />
 
     </LinearLayout>
 
@@ -62,7 +63,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="已完成量：" />
+            android:text="@string/done" />
 
         <EditText
             android:id="@+id/done"
@@ -73,16 +74,18 @@
             android:maxLength="8" />
 
         <Button
+            android:id="@+id/done_minus"
             style="@style/Widget.AppCompat.Button.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-" />
+            android:text="@string/minus" />
 
         <Button
+            android:id="@+id/done_plus"
             style="@style/Widget.AppCompat.Button.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+" />
+            android:text="@string/plus" />
     </LinearLayout>
 
     <LinearLayout
@@ -90,16 +93,15 @@
         android:layout_height="wrap_content">
 
         <TextView
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="开始时间：" />
+            android:text="@string/start_date" />
 
         <EditText
             android:id="@+id/start_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="date" />
+            android:editable="false" />
     </LinearLayout>
 
     <LinearLayout
@@ -109,7 +111,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="备注信息：" />
+            android:text="@string/remark" />
 
         <EditText
             android:id="@+id/remark"
@@ -118,23 +120,18 @@
             android:inputType="text" />
     </LinearLayout>
 
-    <!--<CalendarView-->
-    <!--android:id="@+id/calendar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:visibility="invisible" />-->
 
     <Button
         android:id="@+id/save_goal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="保存" />
+        android:text="@string/save_goal" />
 
     <Button
         android:id="@+id/delete_goal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="删除"
+        android:text="@string/delete_goal"
         android:visibility="invisible" />
 
 

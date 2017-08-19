@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -17,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -58,7 +61,7 @@ public class AddActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         if (!startDateView.getText().toString().isEmpty()) {
             String startDate = startDateView.getText().toString();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             try {
                 Date date = sdf.parse(startDate);
                 calendar.setTime(date);
@@ -76,10 +79,16 @@ public class AddActivity extends AppCompatActivity {
             }
         }, year, month, day);
 
-        startDateView.setOnClickListener(new View.OnClickListener() {
+        startDateView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (null != imm) {
+                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                }
+
                 datePicker.show();
+                return false;
             }
         });
 
@@ -90,7 +99,7 @@ public class AddActivity extends AppCompatActivity {
                 String GoalName = goalNameView.getText().toString();
 
                 if (GoalName.isEmpty()) {
-                    Toast.makeText(AddActivity.this, "请填写成就名称", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddActivity.this, "请填写目标名称", Toast.LENGTH_SHORT).show();
                 } else {
                     String totalStr = totalView.getText().toString();
                     String doneStr = doneView.getText().toString();
@@ -117,6 +126,84 @@ public class AddActivity extends AppCompatActivity {
 
             }
         });
+
+
+        Button totalPlus = (Button) findViewById(R.id.total_plus);
+        Button totalMinus = (Button) findViewById(R.id.total_minus);
+        Button donePlus = (Button) findViewById(R.id.done_plus);
+        Button doneMinus = (Button) findViewById(R.id.done_minus);
+
+        totalPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int total = Integer.valueOf(totalView.getText().toString());
+                if (++total >= 99999999) {
+                    total = 99999999;
+                }
+                totalView.setText(String.valueOf(total));
+            }
+        });
+
+        totalMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int total = Integer.valueOf(totalView.getText().toString());
+                if (--total <= 1) {
+                    total = 1;
+                }
+                totalView.setText(String.valueOf(total));
+            }
+        });
+
+        donePlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int done = Integer.valueOf(doneView.getText().toString());
+                if (++done >= 99999999) {
+                    done = 99999999;
+                }
+                doneView.setText(String.valueOf(done));
+            }
+        });
+
+        doneMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int done = Integer.valueOf(doneView.getText().toString());
+                if (--done <= 0) {
+                    done = 0;
+                }
+                doneView.setText(String.valueOf(done));
+            }
+        });
+
+//        totalMinus.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    for (; ; ) {
+//                        int total = Integer.valueOf(totalView.getText().toString());
+//                        totalView.setText(String.valueOf(--total));
+//
+//                        if (event.getAction() == MotionEvent.ACTION_UP) {
+//                            break;
+//                        }
+//                        try {
+//                            Thread.sleep(2000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//
+//                }
+//                return false;
+//
+//            }
+//        });
+
+
     }
 
     @Override
