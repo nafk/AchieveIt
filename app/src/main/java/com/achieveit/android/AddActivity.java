@@ -75,7 +75,9 @@ public class AddActivity extends AppCompatActivity {
 
         final DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                startDateView.setText(year + "-" + (month + 1) + "-" + day);
+                String monthStr = ++month < 10 ? "0" + String.valueOf(month) : String.valueOf(month);
+                String dayStr = day < 10 ? "0" + String.valueOf(day) : String.valueOf(day);
+                startDateView.setText(year + "-" + monthStr + "-" + dayStr);
             }
         }, year, month, day);
 
@@ -136,7 +138,12 @@ public class AddActivity extends AppCompatActivity {
         totalPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int total = Integer.valueOf(totalView.getText().toString());
+
+                String totalStr = totalView.getText().toString();
+                if (totalStr.isEmpty()) {
+                    totalStr = "0";
+                }
+                int total = Integer.valueOf(totalStr);
                 if (++total >= 99999999) {
                     total = 99999999;
                 }
@@ -147,7 +154,11 @@ public class AddActivity extends AppCompatActivity {
         totalMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int total = Integer.valueOf(totalView.getText().toString());
+                String totalStr = totalView.getText().toString();
+                if (totalStr.isEmpty()) {
+                    totalStr = "1";
+                }
+                int total = Integer.valueOf(totalStr);
                 if (--total <= 1) {
                     total = 1;
                 }
@@ -158,7 +169,12 @@ public class AddActivity extends AppCompatActivity {
         donePlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int done = Integer.valueOf(doneView.getText().toString());
+                String doneStr = doneView.getText().toString();
+                if (doneStr.isEmpty()) {
+                    doneStr = "0";
+                }
+
+                int done = Integer.valueOf(doneStr);
                 if (++done >= 99999999) {
                     done = 99999999;
                 }
@@ -169,7 +185,12 @@ public class AddActivity extends AppCompatActivity {
         doneMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int done = Integer.valueOf(doneView.getText().toString());
+                String doneStr = doneView.getText().toString();
+                if (doneStr.isEmpty()) {
+                    doneStr = "1";
+                }
+
+                int done = Integer.valueOf(doneStr);
                 if (--done <= 0) {
                     done = 0;
                 }
