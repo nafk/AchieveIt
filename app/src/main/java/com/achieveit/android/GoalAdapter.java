@@ -1,6 +1,7 @@
 package com.achieveit.android;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +72,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.goalName.setText(goal.getName());
         holder.done.setText(String.valueOf(goal.getDone()));
         holder.total.setText(String.valueOf(goal.getTotal()));
-        holder.startDate.setText(goal.getStartDate());
+        if(TextUtils.isEmpty(goal.getStartDate())){
+            holder.goalView.findViewById(R.id.start_date_text).setVisibility(View.INVISIBLE);
+        }else{
+            holder.startDate.setText(goal.getStartDate());
+        }
+
 
         float result = (float) goal.getDone() / (float) goal.getTotal() * 100f;
 

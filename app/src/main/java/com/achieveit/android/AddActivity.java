@@ -3,8 +3,8 @@ package com.achieveit.android;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -28,6 +28,9 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
+        android.support.v7.app.ActionBar supportActionBar = getSupportActionBar();
+        supportActionBar.setTitle("New goal");
+
         final EditText goalNameView = (EditText) findViewById(R.id.goal_name);
         final EditText totalView = (EditText) findViewById(R.id.total);
         final EditText doneView = (EditText) findViewById(R.id.done);
@@ -38,6 +41,7 @@ public class AddActivity extends AppCompatActivity {
         final Goal goal = (Goal) intent.getSerializableExtra("goal");
 
         if (null != goal) {
+            supportActionBar.setTitle("Edit");
             goalNameView.setText(goal.getName());
             totalView.setText(String.valueOf(goal.getTotal()));
             doneView.setText(String.valueOf(goal.getDone()));
