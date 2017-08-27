@@ -9,14 +9,21 @@
     tools:context="com.achieveit.android.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:id="@+id/init_hint"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="@string/init_hint"
+        android:textColor="#BDBDBD"
+        android:textSize="24sp"
+        android:textStyle="italic"
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/goal_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-
-
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>

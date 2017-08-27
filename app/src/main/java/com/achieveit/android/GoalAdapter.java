@@ -72,9 +72,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.goalName.setText(goal.getName());
         holder.done.setText(String.valueOf(goal.getDone()));
         holder.total.setText(String.valueOf(goal.getTotal()));
-        if(TextUtils.isEmpty(goal.getStartDate())){
+        if (TextUtils.isEmpty(goal.getStartDate())) {
             holder.goalView.findViewById(R.id.start_date_text).setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             holder.startDate.setText(goal.getStartDate());
         }
 
