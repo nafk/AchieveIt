@@ -20,19 +20,20 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static List<Goal> goalList = new ArrayList<>();
-    GoalAdapter adapter;
+    private static List<Goal> mGoalList = new ArrayList<>();
+    private GoalAdapter adapter;
+
+
+    public static void actionStart(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initData();
-        if (goalList == null || goalList.isEmpty()) {
-            findViewById(R.id.init_hint).setVisibility(View.VISIBLE);
-        } else {
-            findViewById(R.id.init_hint).setVisibility(View.GONE);
-        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,39 +47,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goal_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new GoalAdapter(goalList);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-
-        DragItemTouchHelperCallback dragCallback = new DragItemTouchHelperCallback();
-        dragCallback.itemMoveListener = adapter;
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(dragCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
+        initialize();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        initData();
-        if (goalList == null || goalList.isEmpty()) {
-            findViewById(R.id.init_hint).setVisibility(View.VISIBLE);
-        } else {
-            findViewById(R.id.init_hint).setVisibility(View.GONE);
-        }
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goal_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new GoalAdapter(goalList);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-
-        DragItemTouchHelperCallback dragCallback = new DragItemTouchHelperCallback();
-        dragCallback.itemMoveListener = adapter;
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(dragCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        initialize();
     }
 
     @Override
@@ -104,10 +79,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         for (int i = 0; i < adapter.mGoalList.size(); i++) {
             Goal goal = adapter.mGoalList.get(i);
             goal.setSort(i);
@@ -115,14 +89,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void initData() {
-        //goalList = DataSupport.findAll(Goal.class);
-        goalList = DataSupport.order("sort").find(Goal.class);
+        mGoalList = DataSupport.order("sort").find(Goal.class);
     }
 
-    public static void actionStart(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
-        context.startActivity(intent);
+    private void initialize() {
+        initData();
+        if (mGoalList == null || mGoalList.isEmpty()) {
+            findViewById(R.id.init_hint).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.init_hint).setVisibility(View.GONE);
+        }
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goal_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        adapter = new GoalAdapter(mGoalList, this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
+        DragItemTouchHelperCallback dragCallback = new DragItemTouchHelperCallback();
+        dragCallback.itemMoveListener = adapter;
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(dragCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 }

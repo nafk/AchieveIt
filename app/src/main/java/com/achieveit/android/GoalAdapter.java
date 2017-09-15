@@ -1,5 +1,6 @@
 package com.achieveit.android;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,12 +22,14 @@ import java.util.List;
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> implements DragItemTouchHelperCallback.ItemMoveListener {
 
     protected List<Goal> mGoalList;
+    private Context mContext;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView goalName;
         TextView done;
         TextView total;
         TextView startDate;
+        TextView startDateText;
         TextView progress;
         ProgressBar progressBar;
 
@@ -39,13 +42,17 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> im
             done = (TextView) view.findViewById(R.id.done);
             total = (TextView) view.findViewById(R.id.total);
             startDate = (TextView) view.findViewById(R.id.start_date);
+            startDateText = (TextView) view.findViewById(R.id.start_date_text);
             progress = (TextView) view.findViewById(R.id.progress);
             progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+
+
         }
     }
 
-    public GoalAdapter(List<Goal> goalList) {
+    public GoalAdapter(List<Goal> goalList, Context context) {
         mGoalList = goalList;
+        mContext = context;
     }
 
     @Override
@@ -62,10 +69,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> im
 
             }
         });
-
-
         return holder;
-
     }
 
     @Override
@@ -75,8 +79,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> im
         holder.done.setText(String.valueOf(goal.getDone()));
         holder.total.setText(String.valueOf(goal.getTotal()));
         if (TextUtils.isEmpty(goal.getStartDate())) {
-            holder.goalView.findViewById(R.id.start_date_text).setVisibility(View.INVISIBLE);
+            holder.startDateText.setText("");
+            holder.startDate.setText("");
         } else {
+            String s = mContext.getString(R.string.start_date);
+            holder.startDateText.setText(s);
             holder.startDate.setText(goal.getStartDate());
         }
 
@@ -100,11 +107,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> im
         Goal g = mGoalList.get(src);
         mGoalList.remove(src);
         mGoalList.add(des, g);
-//        for (int i = 0; i < mGoalList.size(); i++) {
-//            Goal goal = mGoalList.get(i);
-//            goal.setSort(i);
-//            goal.save();
-//        }
     }
 
 
