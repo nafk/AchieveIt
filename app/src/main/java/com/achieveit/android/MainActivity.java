@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static List<Goal> goalList = new ArrayList<>();
+    GoalAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +49,14 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goal_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        GoalAdapter adapter = new GoalAdapter(goalList);
+        adapter = new GoalAdapter(goalList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        DragItemTouchHelperCallback dragCallback = new DragItemTouchHelperCallback();
+        dragCallback.itemMoveListener = adapter;
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(dragCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
     }
 
@@ -64,9 +71,14 @@ public class MainActivity extends AppCompatActivity {
         }
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goal_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        GoalAdapter adapter = new GoalAdapter(goalList);
+        adapter = new GoalAdapter(goalList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        DragItemTouchHelperCallback dragCallback = new DragItemTouchHelperCallback();
+        dragCallback.itemMoveListener = adapter;
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(dragCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -92,8 +104,21 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        for (int i = 0; i < adapter.mGoalList.size(); i++) {
+            Goal goal = adapter.mGoalList.get(i);
+            goal.setSort(i);
+            goal.save();
+        }
+    }
+
+
     private void initData() {
-        goalList = DataSupport.findAll(Goal.class);
+        //goalList = DataSupport.findAll(Goal.class);
+        goalList = DataSupport.order("sort").find(Goal.class);
     }
 
     public static void actionStart(Context context) {

@@ -16,6 +16,7 @@ public class Goal extends DataSupport implements Serializable {
     private Integer total;
     private String startDate;
     private String remark;
+    private Integer sort;
 
     public Integer getId() {
         return id;
@@ -63,5 +64,13 @@ public class Goal extends DataSupport implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 }

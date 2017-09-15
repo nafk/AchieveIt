@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.litepal.crud.DataSupport;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -16,9 +18,9 @@ import java.util.List;
  * Created by YT on 17/8/10/010.
  */
 
-public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
+public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> implements DragItemTouchHelperCallback.ItemMoveListener {
 
-    private List<Goal> mGoalList;
+    protected List<Goal> mGoalList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView goalName;
@@ -92,5 +94,18 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     public int getItemCount() {
         return mGoalList.size();
     }
+
+    @Override
+    public void onMove(int src, int des) {
+        Goal g = mGoalList.get(src);
+        mGoalList.remove(src);
+        mGoalList.add(des, g);
+//        for (int i = 0; i < mGoalList.size(); i++) {
+//            Goal goal = mGoalList.get(i);
+//            goal.setSort(i);
+//            goal.save();
+//        }
+    }
+
 
 }
