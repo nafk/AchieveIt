@@ -15,6 +15,8 @@ public class Goal extends DataSupport implements Serializable {
     private Integer done;
     private Integer total;
     private String startDate;
+    private String planEndDate;
+    private String endDate;
     private String remark;
     private Integer sort;
 
@@ -73,4 +75,21 @@ public class Goal extends DataSupport implements Serializable {
     public void setSort(Integer sort) {
         this.sort = sort;
     }
+
+    public String getPlanEndDate() {
+        return planEndDate;
+    }
+
+    public void setPlanEndDate(String planEndDate) {
+        this.planEndDate = planEndDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
 }

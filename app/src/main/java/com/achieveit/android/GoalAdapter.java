@@ -1,13 +1,17 @@
 package com.achieveit.android;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.litepal.crud.DataSupport;
 
@@ -69,6 +73,28 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> im
 
             }
         });
+
+//        holder.goalView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//
+//                v.setBackgroundColor(Color.CYAN);
+//                return false;
+//            }
+//        });
+//
+//        holder.goalView.setOnTouchListener(new View.OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                Log.d("aaa","ontouch");
+//                //if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    Log.d("aaa","action up");
+//                    v.setBackgroundColor(Color.WHITE);
+//                //}
+//                return false;
+//            }
+//        });
         return holder;
     }
 
@@ -82,7 +108,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> im
             holder.startDateText.setText("");
             holder.startDate.setText("");
         } else {
-            String s = mContext.getString(R.string.start_date);
+            String s = mContext.getString(R.string.start_date_main);
             holder.startDateText.setText(s);
             holder.startDate.setText(goal.getStartDate());
         }

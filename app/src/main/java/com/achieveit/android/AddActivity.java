@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -14,9 +17,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.litepal.crud.DataSupport;
+import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,11 +32,22 @@ import java.util.Locale;
 public class AddActivity extends AppCompatActivity {
 
     private Goal mGoal = null;
-    private EditText mGoalNameView = null;
-    private EditText mTotalView = null;
-    private EditText mDoneView = null;
-    private EditText mStartDateView = null;
-    private EditText mRemarkView = null;
+    private EditText mGoalNameView;
+    private EditText mTotalView;
+    private EditText mDoneView;
+    private EditText mStartDateView;
+    private EditText mPlanEndDateView;
+    private EditText mEndDateView;
+    private EditText mRemarkView;
+
+    private TextView mDaysView;
+    private TextView mTaskPerDayView;
+    private TextView mTotalCopyView;
+    private TextView mDoneCopyView;
+    private TextView mUnDoneView;
+    private TextView mDaysLeftView;
+    private TextView mTaskPerDayOfDaysLeftView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +69,18 @@ public class AddActivity extends AppCompatActivity {
         mTotalView = (EditText) findViewById(R.id.total);
         mDoneView = (EditText) findViewById(R.id.done);
         mStartDateView = (EditText) findViewById(R.id.start_date);
+        mPlanEndDateView = (EditText) findViewById(R.id.plan_end_date);
+        mEndDateView = (EditText) findViewById(R.id.end_date);
         mRemarkView = (EditText) findViewById(R.id.remark);
+
+        mDaysView = (TextView) findViewById(R.id.days);
+        mTaskPerDayView = (TextView) findViewById(R.id.task_per_day);
+        mTotalCopyView = (TextView) findViewById(R.id.total_copy);
+        mDoneCopyView = (TextView) findViewById(R.id.done_copy);
+        mUnDoneView = (TextView) findViewById(R.id.undone);
+        mDaysLeftView = (TextView) findViewById(R.id.days_left);
+        mTaskPerDayOfDaysLeftView = (TextView) findViewById(R.id.task_per_day_of_days_left);
+
 
         Intent intent = getIntent();
         mGoal = (Goal) intent.getSerializableExtra("goal");
@@ -64,11 +91,140 @@ public class AddActivity extends AppCompatActivity {
             mTotalView.setText(String.valueOf(mGoal.getTotal()));
             mDoneView.setText(String.valueOf(mGoal.getDone()));
             mStartDateView.setText(mGoal.getStartDate());
+            mPlanEndDateView.setText(mGoal.getPlanEndDate());
+
+            mTotalCopyView.setText(String.valueOf(mGoal.getTotal()));
+            mDoneCopyView.setText(String.valueOf(mGoal.getDone()));
+            int unDone = mGoal.getTotal() - mGoal.getDone();
+            mUnDoneView.setText(String.valueOf(unDone));
+
+            if (!TextUtils.isEmpty(mGoal.getPlanEndDate())) {
+                String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                int daysLeft = calcDaysBetween(today, mGoal.getPlanEndDate());
+                float taskPerDayOfDaysLeft = (float) unDone / (float) daysLeft;
+                taskPerDayOfDaysLeft = (float) (Math.round(taskPerDayOfDaysLeft * 10)) / 10;
+                mDaysLeftView.setText(String.valueOf(daysLeft));
+                mTaskPerDayOfDaysLeftView.setText(String.valueOf(taskPerDayOfDaysLeft));
+
+
+                if (!TextUtils.isEmpty(mGoal.getStartDate())) {
+                    int days = calcDaysBetween(mGoal.getStartDate(), mGoal.getPlanEndDate());
+                    mDaysView.setText(String.valueOf(days));
+                    String totalStr = mTotalView.getText().toString();
+                    if (!totalStr.isEmpty()) {
+                        float taskPerDay = Float.valueOf(totalStr) / (float) days;
+                        taskPerDay = (float) (Math.round(taskPerDay * 10)) / 10;
+                        mTaskPerDayView.setText(String.valueOf(taskPerDay));
+
+                    }
+                }
+            }
+
+            mEndDateView.setText(mGoal.getEndDate());
             mRemarkView.setText(mGoal.getRemark());
         }
 
-        processDate();
+
+        processDate(mStartDateView);
+        processDate(mPlanEndDateView);
+        processDate(mEndDateView);
         bindPlusAndMinusButtons();
+
+        mTotalView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mTotalCopyView.setText(s.toString());
+                String doneStr = mDoneView.getText().toString();
+                if (!s.toString().isEmpty() && !doneStr.isEmpty()) {
+                    int total = Integer.valueOf(s.toString());
+                    int done = Integer.valueOf(doneStr);
+                    mUnDoneView.setText(String.valueOf(total - done));
+                    if (!mDaysLeftView.getText().toString().isEmpty()) {
+                        float taskPerDayOfDaysLeft = (float) (total - done) / Float.valueOf(mDaysLeftView.getText().toString());
+                        taskPerDayOfDaysLeft = (float) (Math.round(taskPerDayOfDaysLeft * 10)) / 10;
+                        mTaskPerDayOfDaysLeftView.setText(String.valueOf(taskPerDayOfDaysLeft));
+                    }
+                } else {
+                    mUnDoneView.setText("");
+                    mTaskPerDayOfDaysLeftView.setText("");
+                }
+                String daysStr = mDaysView.getText().toString();
+                if (!s.toString().isEmpty() && !daysStr.isEmpty()) {
+                    int total = Integer.valueOf(s.toString());
+                    int days = Integer.valueOf(daysStr);
+
+                    float taskPerDay = (float) total / (float) days;
+                    taskPerDay = (float) (Math.round(taskPerDay * 10)) / 10;
+                    mTaskPerDayView.setText(String.valueOf(taskPerDay));
+                } else {
+                    mTaskPerDayView.setText("");
+                }
+            }
+        });
+
+        mDoneView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mDoneCopyView.setText(s.toString());
+                String totalStr = mTotalView.getText().toString();
+                if (!s.toString().isEmpty() && !totalStr.isEmpty()) {
+                    int done = Integer.valueOf(s.toString());
+                    int total = Integer.valueOf(totalStr);
+                    mUnDoneView.setText(String.valueOf(total - done));
+                    if (!mDaysLeftView.getText().toString().isEmpty()) {
+                        float taskPerDayOfDaysLeft = (float) (total - done) / Float.valueOf(mDaysLeftView.getText().toString());
+                        taskPerDayOfDaysLeft = (float) (Math.round(taskPerDayOfDaysLeft * 10)) / 10;
+                        mTaskPerDayOfDaysLeftView.setText(String.valueOf(taskPerDayOfDaysLeft));
+                    }
+                } else {
+                    mUnDoneView.setText("");
+                    mTaskPerDayOfDaysLeftView.setText("");
+                }
+                /*String daysStr = mDaysView.getText().toString();
+                if (!s.toString().isEmpty() && !daysStr.isEmpty()) {
+                    int total = Integer.valueOf(s.toString());
+                    int days = Integer.valueOf(daysStr);
+
+                    float taskPerDay = (float) total / (float) days;
+                    taskPerDay = (float) (Math.round(taskPerDay * 10)) / 10;
+                    mTaskPerDayView.setText(String.valueOf(taskPerDay));
+                }else{
+                    mTaskPerDayView.setText("");
+                }*/
+            }
+        });
+    }
+
+    private int calcDaysBetween(String startDate, String planEndDate) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            long ms = sdf.parse(planEndDate).getTime() - sdf.parse(startDate).getTime();
+            int days = (int) (ms / (1000 * 3600 * 24));
+            if (days >= 0) {
+                return days + 1;
+            } else {
+                return 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
     }
 
     private void bindPlusAndMinusButtons() {
@@ -167,16 +323,17 @@ public class AddActivity extends AppCompatActivity {
 //        });
     }
 
-    private void processDate() {
+    private void processDate(final TextView dateView) {
         int year;
         int month;
         int day;
         Calendar calendar = Calendar.getInstance();
-        if (!mStartDateView.getText().toString().isEmpty()) {
-            String startDate = mStartDateView.getText().toString();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        //TODO MM-dd-yyyy...
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        if (!dateView.getText().toString().isEmpty()) {
+            String dateStr = dateView.getText().toString();
             try {
-                Date date = sdf.parse(startDate);
+                Date date = sdf.parse(dateStr);
                 calendar.setTime(date);
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -187,14 +344,53 @@ public class AddActivity extends AppCompatActivity {
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
         final DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 String monthStr = ++month < 10 ? "0" + String.valueOf(month) : String.valueOf(month);
                 String dayStr = day < 10 ? "0" + String.valueOf(day) : String.valueOf(day);
-                mStartDateView.setText(year + "-" + monthStr + "-" + dayStr);
+                String date = year + "-" + monthStr + "-" + dayStr;
+                dateView.setText(date);
+
+                if (R.id.start_date == dateView.getId()) {
+                    String end = mPlanEndDateView.getText().toString();
+                    if (!end.isEmpty()) {
+                        int days = calcDaysBetween(date, end);
+                        mDaysView.setText(String.valueOf(days));
+                        String totalStr = mTotalView.getText().toString();
+                        if (!totalStr.isEmpty()) {
+                            float taskPerDay = Float.valueOf(totalStr) / (float) days;
+                            taskPerDay = (float) (Math.round(taskPerDay * 10)) / 10;
+                            mTaskPerDayView.setText(String.valueOf(taskPerDay));
+                        }
+                    }
+                } else if (R.id.plan_end_date == dateView.getId()) {
+                    String start = mStartDateView.getText().toString();
+                    if (!start.isEmpty()) {
+                        int days = calcDaysBetween(start, date);
+                        mDaysView.setText(String.valueOf(days));
+                        String totalStr = mTotalView.getText().toString();
+                        if (!totalStr.isEmpty()) {
+                            float taskPerDay = Float.valueOf(totalStr) / (float) days;
+                            taskPerDay = (float) (Math.round(taskPerDay * 10)) / 10;
+                            mTaskPerDayView.setText(String.valueOf(taskPerDay));
+                        }
+                    }
+
+                    String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                    int daysLeft = calcDaysBetween(today, date);
+                    mDaysLeftView.setText(String.valueOf(daysLeft));
+                    if (!mUnDoneView.getText().toString().isEmpty()) {
+                        float taskPerDayOfDaysLeft = Float.valueOf(mUnDoneView.getText().toString()) / (float) daysLeft;
+                        taskPerDayOfDaysLeft = (float) (Math.round(taskPerDayOfDaysLeft * 10)) / 10;
+                        mTaskPerDayOfDaysLeftView.setText(String.valueOf(taskPerDayOfDaysLeft));
+                    }
+
+
+                }
             }
         }, year, month, day);
 
-        mStartDateView.setOnTouchListener(new View.OnTouchListener() {
+        dateView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -242,6 +438,8 @@ public class AddActivity extends AppCompatActivity {
                 String totalStr = mTotalView.getText().toString();
                 String doneStr = mDoneView.getText().toString();
                 String startDate = mStartDateView.getText().toString();
+                String planEndDate = mPlanEndDateView.getText().toString();
+                String endDate = mEndDateView.getText().toString();
                 String remark = mRemarkView.getText().toString();
 
                 Integer total = "".equals(totalStr) ? 1 : Integer.parseInt(totalStr);
@@ -252,6 +450,8 @@ public class AddActivity extends AppCompatActivity {
                 goal1.setTotal(total);
                 goal1.setDone(done);
                 goal1.setStartDate(startDate);
+                goal1.setPlanEndDate(planEndDate);
+                goal1.setEndDate(endDate);
                 goal1.setRemark(remark);
 
                 if (null != mGoal) {
