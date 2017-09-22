@@ -97,8 +97,10 @@ public class MainActivity extends AppCompatActivity {
         initData();
         if (mGoalList == null || mGoalList.isEmpty()) {
             findViewById(R.id.init_hint).setVisibility(View.VISIBLE);
+            findViewById(R.id.goal_list).setVisibility(View.GONE);
         } else {
             findViewById(R.id.init_hint).setVisibility(View.GONE);
+            findViewById(R.id.goal_list).setVisibility(View.VISIBLE);
         }
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goal_list);

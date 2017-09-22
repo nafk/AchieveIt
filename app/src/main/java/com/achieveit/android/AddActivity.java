@@ -454,9 +454,11 @@ public class AddActivity extends AppCompatActivity {
                 goal1.setEndDate(endDate);
                 goal1.setRemark(remark);
 
+
                 if (null != mGoal) {
                     goal1.update(mGoal.getId());
                 } else {
+                    goal1.setSort(9999);
                     goal1.save();
                 }
                 MainActivity.actionStart(AddActivity.this);
